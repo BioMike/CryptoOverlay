@@ -99,12 +99,9 @@ src_configure() {
 	econf \
 		--enable-wallet \
 		--disable-ccache \
-		--disable-static \
 		--disable-tests \
 		--with-system-leveldb \
-		--with-system-libsecp256k1  \
-		--without-libs \
-		--without-utils \
+		#--with-system-libsecp256k1  \
 		--without-daemon  \
         --with-gui=$(usex qt5 qt5 qt4) \
         $(use_with dbus qtdbus)  \
