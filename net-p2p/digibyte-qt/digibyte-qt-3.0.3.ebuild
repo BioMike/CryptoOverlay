@@ -34,7 +34,7 @@ RDEPEND="
 		net-libs/miniupnpc
 	)
 	sys-libs/db:$(db_ver_to_slot "${DB_VER}")[cxx]
-	<=dev-libs/leveldb-1.15.0-r1
+	dev-libs/leveldb
 	!qt5? (
 		dev-qt/qtgui:4
 		dbus? (
@@ -57,7 +57,7 @@ DOCS="doc/README.md doc/release-notes.md"
 S="${WORKDIR}/${MyP}"
 
 src_prepare() {
-	#epatch "${FILESDIR}/0.9.0-sys_leveldb.patch"
+	epatch "${FILESDIR}/3.0.3_sys_leveldb.patch"
 	eautoreconf
 	rm -r src/leveldb
 
@@ -120,11 +120,12 @@ src_install() {
 
 	make_desktop_entry "${PN} %u" "DigiByte-Qt" "/usr/share/pixmaps/${PN}.ico" "Qt;Network;P2P;Office;Finance;" "MimeType=x-scheme-handler/digibyte;\nTerminal=false"
 
-	newman contrib/debian/manpages/bitcoin-qt.1 ${PN}.1
+	newman contrib/debian/manpages/digibyte-qt.1 ${PN}.1
+	newman contrib/debian/manpages/digibyte.conf.5 ${PN}.conf.5
 
 	if use kde; then
 		insinto /usr/share/kde4/services
-		newins contrib/debian/bitcoin-qt.protocol ${PN}.protocol
+		newins contrib/debian/digibyte-qt.protocol ${PN}.protocol
 	fi
 }
 
