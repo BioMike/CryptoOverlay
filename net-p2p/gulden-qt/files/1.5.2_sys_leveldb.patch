@@ -1,0 +1,35 @@
+diff -Naur gulden-official-1.5.2.orig/configure.ac gulden-official-1.5.2/configure.ac
+--- gulden-official-1.5.2.orig/configure.ac	2015-10-11 10:02:54.000000000 +0200
++++ gulden-official-1.5.2/configure.ac	2015-11-15 22:25:41.559553770 +0100
+@@ -489,7 +489,18 @@
+ LEVELDB_CPPFLAGS=
+ LIBLEVELDB=
+ LIBMEMENV=
+-AM_CONDITIONAL([EMBEDDED_LEVELDB],[true])
++AC_ARG_WITH([system-leveldb],
++  [AS_HELP_STRING([--with-system-leveldb],
++  [Build with system LevelDB (default is no; DANGEROUS; NOT SUPPORTED)])],
++  [system_leveldb=$withval],
++  [system_leveldb=no]
++)
++if test x$system_leveldb != xno; then
++  LEVELDB_CPPFLAGS=
++  LIBLEVELDB=-lleveldb
++  LIBMEMENV=-lmemenv
++fi
++AM_CONDITIONAL([EMBEDDED_LEVELDB],[test x$system_leveldb = xno])
+ AC_SUBST(LEVELDB_CPPFLAGS)
+ AC_SUBST(LIBLEVELDB)
+ AC_SUBST(LIBMEMENV)
+diff -Naur gulden-official-1.5.2.orig/src/leveldbwrapper.cpp gulden-official-1.5.2/src/leveldbwrapper.cpp
+--- gulden-official-1.5.2.orig/src/leveldbwrapper.cpp	2015-10-11 10:02:54.000000000 +0200
++++ gulden-official-1.5.2/src/leveldbwrapper.cpp	2015-11-15 22:26:20.479555709 +0100
+@@ -11,7 +11,7 @@
+ #include <leveldb/cache.h>
+ #include <leveldb/env.h>
+ #include <leveldb/filter_policy.h>
+-#include <memenv.h>
++#include <leveldb/helpers/memenv.h>
+ 
+ void HandleError(const leveldb::Status& status) throw(leveldb_error)
+ {
