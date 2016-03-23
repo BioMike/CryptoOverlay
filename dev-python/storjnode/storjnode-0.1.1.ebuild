@@ -18,3 +18,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
+
+distutils-r1_src_prepare() {
+    sed -i "s/'storjnode.bin'/'*.tests', '*.tests.*', 'tests.*', 'tests', 'storjnode.bin'/g" setup.py || die
+}
